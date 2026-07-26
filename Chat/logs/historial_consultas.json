@@ -1,0 +1,82 @@
+[
+  {
+    "timestamp": "2026-07-26 14:15:27",
+    "pregunta_estudiante": "Que dia es hoy",
+    "respuesta_jc": "Lo siento, pero no encontré esta información en los documentos."
+  },
+  {
+    "timestamp": "2026-07-26 14:50:12",
+    "pregunta_estudiante": "Holi",
+    "respuesta_jc": "Hola, ¿en qué puedo ayudarte? ¿Tienes alguna duda o necesitas información sobre algo en particular?"
+  },
+  {
+    "timestamp": "2026-07-26 14:50:18",
+    "pregunta_estudiante": "como te llamas",
+    "respuesta_jc": "Hola, me llamo JC y soy el agente de Inteligencia Artificial oficial de atención al estudiante de la Universidad Tecnológica de Lima (UTL). Estoy aquí para ayudarte con cualquier duda o inquietud que tengas."
+  },
+  {
+    "timestamp": "2026-07-26 14:51:59",
+    "pregunta_estudiante": "para que universidad trabajas",
+    "respuesta_jc": "Me alegra ayudarte. Trabajo para la Universidad Tecnológica de Lima (UTL)."
+  },
+  {
+    "timestamp": "2026-07-26 14:52:25",
+    "pregunta_estudiante": "como se llama tu creador",
+    "respuesta_jc": "Lo siento, pero no encontré información sobre mi creador en los documentos proporcionados."
+  },
+  {
+    "timestamp": "2026-07-26 15:31:40",
+    "pregunta_estudiante": "Hola",
+    "respuesta_jc": "¡Hola! Me alegra poder ayudarte. ¿En qué puedo ayudarte hoy? ¿Tienes alguna duda sobre la Universidad Tecnológica de Lima o necesitas información sobre algún procedimiento? Estoy aquí para ayudarte.\n\nSi deseas, puedes preguntar sobre la política de reembolso de matrículas, el reglamento del estudiante o cualquier otra cosa que te interese.\n\n¿En qué puedo ayudarte?"
+  },
+  {
+    "timestamp": "2026-07-26 15:42:37",
+    "query": "Hola",
+    "response": "Hola, ¿en qué puedo ayudarte? ¿Tienes alguna duda sobre la política de reembolso de matrículas o algún otro tema relacionado con la Universidad Tecnológica de Lima?"
+  },
+  {
+    "timestamp": "2026-07-26 15:42:43",
+    "query": "Como te llamas",
+    "response": "Me llamo JC y soy el agente de Inteligencia Artificial oficial de atención al estudiante de la Universidad Tecnológica de Lima (UTL)."
+  },
+  {
+    "timestamp": "2026-07-26 15:42:58",
+    "query": "Para que fuiste creado",
+    "response": "Fui creado como el agente de Inteligencia Artificial oficial de atención al estudiante de la Universidad Tecnológica de Lima (UTL), con la misión de responder las dudas de los estudiantes basándome en el contexto de los documentos PDF oficiales de la institución.\n\nMi objetivo es proporcionar información clara y precisa a los estudiantes sobre las políticas, procedimientos y programas de la UTL, de acuerdo con lo establecido en los documentos proporcionados.\n\nFuente: No hay información explícita sobre mi creación en los documentos proporcionados."
+  },
+  {
+    "timestamp": "2026-07-26 15:43:31",
+    "query": "cuanto es la nota minima",
+    "response": "Lo siento, pero no encontré información sobre la nota mínima en los documentos proporcionados. \n\nNo encontré esta información en los documentos."
+  },
+  {
+    "timestamp": "2026-07-26 15:43:39",
+    "query": "Cual es la nota minima",
+    "response": "Lo siento, pero no encontré información sobre la nota mínima en los documentos proporcionados. \n\nNo encontré esta información en los documentos."
+  },
+  {
+    "timestamp": "2026-07-26 15:43:48",
+    "query": "¿Cuáles son las normas del reglamento del estudiante sobre asistencia y evaluaciones?",
+    "response": "Lo siento, pero no encontré información sobre las normas del reglamento del estudiante sobre asistencia y evaluaciones en los documentos proporcionados.\n\nFuente: reglamento_estudiante.pdf | Pagina: 2"
+  },
+  {
+    "timestamp": "2026-07-26 15:43:53",
+    "query": "¿Cuáles son las normas del reglamento del estudiante sobre asistencia y evaluaciones?",
+    "response": "Lo siento, pero no encontré información sobre las normas del reglamento del estudiante sobre asistencia y evaluaciones en los documentos proporcionados.\n\nFuente: reglamento_estudiante.pdf | Pagina: 2"
+  },
+  {
+    "timestamp": "2026-07-26 15:43:57",
+    "query": "¿Cómo se obtiene el certificado de estudios y cuáles son los requisitos?",
+    "response": "Lo siento, pero no encontré información sobre cómo obtener el certificado de estudios y los requisitos para ello en los documentos proporcionados.\n\nFuente: No encontré esta información en los documentos."
+  },
+  {
+    "timestamp": "2026-07-26 15:44:00",
+    "query": "¿En qué consiste el programa de becas por excelencia y referidos de la UTL?",
+    "response": "El programa de becas por excelencia de la UTL se refiere a la \"Beca a la Excelencia Académica\", que ofrece cobertura parcial o total por alto rendimiento académico. Además, el programa de referidos se refiere al \"Programa de Afiliados\", que permite a estudiantes y egresados generar ingresos extra recomendando la plataforma y recibiendo una comisión del 15% del valor de la matrícula por cada nuevo estudiante matriculado mediante su enlace de referido.\n\nFuente: programa_becas_afiliados.pdf | Pagina: 2"
+  },
+  {
+    "timestamp": "2026-07-26 15:44:19",
+    "query": "Cual es la nota minima",
+    "response": "Lo siento, pero no encontré información sobre la nota mínima en los documentos proporcionados. \n\nNo encontré esta información en los documentos."
+  }
+]
