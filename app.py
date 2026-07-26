@@ -2,14 +2,12 @@ import os
 import sys
 import importlib
 
-# Garantizar que el directorio actual este en el PATH de Python
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
 import streamlit as st
 import fase3_rag_chain
 import logger
 
-# Forzar la recarga dinamica del modulo RAG y logger en memoria
 importlib.reload(fase3_rag_chain)
 importlib.reload(logger)
 
@@ -108,7 +106,7 @@ with st.sidebar:
     else:
         st.markdown("### Universidad Tecnológica de Lima")
         
-    st.markdown("<h3 style='text-align: center;'>Agente IA - JC</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center; margin-top: 10px;'>Agente IA - JC</h3>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; color: #94a3b8;'>Atencion al Estudiante UTL</p>", unsafe_allow_html=True)
     st.divider()
     
@@ -159,7 +157,7 @@ with st.sidebar:
         </div>
         """, unsafe_allow_html=True)
         if st.button("Consultar Plataforma", key="btn_gui", use_container_width=True):
-            st.session_state.temp_prompt = "¿Cómo se entregan las tareas en la plataforma y cuál es el límite de tamaño?"
+            st.session_state.temp_prompt = "¿Cómo se entregan las tareas en la plataforma y cuál me el límite de tamaño?"
 
     with st.expander("Programa de Becas y Afiliados"):
         st.markdown("""
