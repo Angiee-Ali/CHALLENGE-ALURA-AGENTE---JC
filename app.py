@@ -69,15 +69,13 @@ st.markdown("""
         margin-bottom: 0.8rem;
     }
     
-    .stButton > button {
+    .stButton > button, .stDownloadButton > button {
         background: linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%);
         color: white;
         border: none;
         border-radius: 8px;
         font-weight: 500;
-    }
-    .stButton > button:hover {
-        background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+        width: 100%;
     }
     
     .doc-info-box {
@@ -112,6 +110,7 @@ with st.sidebar:
     
     st.markdown("#### Documentos Institucionales")
     
+    # 1. Reglamento del Estudiante
     with st.expander("Reglamento del Estudiante"):
         st.markdown("""
         <div class="doc-info-box">
@@ -119,56 +118,98 @@ with st.sidebar:
         - Asistencia minima requerida: 80%.<br>
         - Evaluaciones: Parcial (30%), Final (40%), Continua (30%).<br>
         - Nota minima aprobatoria: 13.<br>
-        - Normativa de conducta academica.
         </div>
         """, unsafe_allow_html=True)
-        if st.button("Consultar Reglamento", key="btn_reg", use_container_width=True):
-            st.session_state.temp_prompt = "¿Cuáles son las normas del reglamento del estudiante sobre asistencia y evaluaciones?"
+        pdf_path = os.path.join("Chat", "Documentos", "reglamento_estudiante.pdf")
+        if os.path.exists(pdf_path):
+            with open(pdf_path, "rb") as f:
+                st.download_button(
+                    label="Descargar PDF Reglamento",
+                    data=f.read(),
+                    file_name="reglamento_estudiante.pdf",
+                    mime="application/pdf",
+                    key="dl_reg"
+                )
 
+    # 2. Política de Reembolso
     with st.expander("Politica de Reembolso de Matriculas"):
         st.markdown("""
         <div class="doc-info-box">
         <strong>Especificaciones:</strong><br>
-        - Reembolso 100%: Hasta 7 dias antes del inicio de clases.<br>
-        - Reembolso 50%: Primeros 3 dias de inicio de clases.<br>
-        - Tramite formal mediante el modulo de Soporte.
+        - Reembolso 100%: Hasta 7 dias antes del inicio.<br>
+        - Reembolso 50%: Primeros 3 dias de inicio.<br>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("Consultar Reembolsos", key="btn_rem", use_container_width=True):
-            st.session_state.temp_prompt = "¿Cómo aplican las políticas de reembolso de matrícula y cuáles son sus plazos?"
+        pdf_path = os.path.join("Chat", "Documentos", "politica_reembolso_matriculas.pdf")
+        if os.path.exists(pdf_path):
+            with open(pdf_path, "rb") as f:
+                st.download_button(
+                    label="Descargar PDF Reembolso",
+                    data=f.read(),
+                    file_name="politica_reembolso_matriculas.pdf",
+                    mime="application/pdf",
+                    key="dl_rem"
+                )
 
+    # 3. Preguntas Frecuentes
     with st.expander("Preguntas Frecuentes (FAQ)"):
         st.markdown("""
         <div class="doc-info-box">
         <strong>Especificaciones:</strong><br>
-        - Emision de certificados digitales en 5 dias habiles.<br>
-        - Requisitos para cursar dos especializaciones simultaneas.
+        - Certificados digitales en 5 dias habiles.<br>
+        - Doble especializacion simultanea.<br>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("Consultar Certificados", key="btn_faq", use_container_width=True):
-            st.session_state.temp_prompt = "¿Cómo se obtiene el certificado de estudios y cuáles son los requisitos?"
+        pdf_path = os.path.join("Chat", "Documentos", "preguntas_frecuentes_cursos_certificados.pdf")
+        if os.path.exists(pdf_path):
+            with open(pdf_path, "rb") as f:
+                st.download_button(
+                    label="Descargar PDF FAQ",
+                    data=f.read(),
+                    file_name="preguntas_frecuentes_cursos_certificados.pdf",
+                    mime="application/pdf",
+                    key="dl_faq"
+                )
 
+    # 4. Guía de Uso de la Plataforma
     with st.expander("Guia de Uso de la Plataforma"):
         st.markdown("""
         <div class="doc-info-box">
         <strong>Especificaciones:</strong><br>
         - Acceso a campus.utl.edu.pe.<br>
-        - Entrega de tareas en formato PDF/ZIP (maximo 25 MB).
+        - Tareas PDF/ZIP hasta 25 MB.<br>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("Consultar Plataforma", key="btn_gui", use_container_width=True):
-            st.session_state.temp_prompt = "¿Cómo se entregan las tareas en la plataforma y cuál me el límite de tamaño?"
+        pdf_path = os.path.join("Chat", "Documentos", "guia_uso_plataforma.pdf")
+        if os.path.exists(pdf_path):
+            with open(pdf_path, "rb") as f:
+                st.download_button(
+                    label="Descargar PDF Guia",
+                    data=f.read(),
+                    file_name="guia_uso_plataforma.pdf",
+                    mime="application/pdf",
+                    key="dl_gui"
+                )
 
+    # 5. Programa de Becas
     with st.expander("Programa de Becas y Afiliados"):
         st.markdown("""
         <div class="doc-info-box">
         <strong>Especificaciones:</strong><br>
-        - Beca Excelencia Academica: 50% de descuento en pension.<br>
-        - Programa de Referidos: 10% de descuento acumulable.
+        - Beca Excelencia: 50% de descuento.<br>
+        - Referidos: 10% acumulable.<br>
         </div>
         """, unsafe_allow_html=True)
-        if st.button("Consultar Becas", key="btn_bec", use_container_width=True):
-            st.session_state.temp_prompt = "¿En qué consiste el programa de becas por excelencia y referidos de la UTL?"
+        pdf_path = os.path.join("Chat", "Documentos", "programa_becas_afiliados.pdf")
+        if os.path.exists(pdf_path):
+            with open(pdf_path, "rb") as f:
+                st.download_button(
+                    label="Descargar PDF Becas",
+                    data=f.read(),
+                    file_name="programa_becas_afiliados.pdf",
+                    mime="application/pdf",
+                    key="dl_bec"
+                )
 
     st.divider()
     
@@ -199,8 +240,7 @@ for msg in st.session_state.messages:
         st.markdown(msg["content"])
 
 
-prompt_sugerido = st.session_state.pop("temp_prompt", None)
-prompt_usuario = prompt_sugerido or st.chat_input("Ingrese su consulta academica o administrativa...")
+prompt_usuario = st.chat_input("Ingrese su consulta academica o administrativa...")
 
 if prompt_usuario:
     st.session_state.messages.append({"role": "user", "content": prompt_usuario})

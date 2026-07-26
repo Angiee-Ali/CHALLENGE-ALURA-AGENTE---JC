@@ -1,4 +1,5 @@
 import os
+import sys
 from typing import List, Any
 from pathlib import Path
 from dotenv import load_dotenv
@@ -12,29 +13,51 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
 from langchain_core.output_parsers import StrOutputParser
 
+from fase1_ingestion import run_ingestion
+from fase2_vectorstore import build_vectorstore
 
-def load_vectorstore() -> Chroma:
-    """Carga la base de datos vectorial local desde Chat/chroma_db."""
-    persist_directory = os.path.join("Chat", "chroma_db")
-    
-    if not os.path.exists(persist_directory):
-        raise FileNotFoundError(f"Base de datos vectorial no encontrada en {persist_directory}")
-    
-    embeddings = HuggingFaceEmbeddings(
+
+def get_embedding_model() -> HuggingFaceEmbeddings:
+    """Inicializa el modelo de embeddings multilingüe."""
+    return HuggingFaceEmbeddings(
         model_name="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
         model_kwargs={'device': 'cpu'},
         encode_kwargs={'normalize_embeddings': True}
     )
+
+
+def load_vectorstore() -> Chroma:
+    """Carga o indexa automaticamente la base de datos vectorial local."""
+    persist_directory = os.path.join("Chat", "chroma_db")
+    embeddings = get_embedding_model()
     
-    return Chroma(
+    # Auto-indexacion si el directorio no existe o esta vacio
+    if not os.path.exists(persist_directory) or not os.listdir(persist_directory):
+        print("ADVERTENCIA: Base de datos vectorial no encontrada. Iniciando indexacion automatica...")
+        chunks = run_ingestion()
+        if not chunks:
+            raise ValueError("Error critico: No se pudieron extraer chunks de los documentos PDF.")
+        return build_vectorstore(chunks, persist_directory=persist_directory)
+    
+    vectorstore = Chroma(
         persist_directory=persist_directory,
         embedding_function=embeddings,
         collection_name="utl_jc_docs"
     )
+    
+    # Validacion del numero de documentos indexados
+    doc_count = vectorstore._collection.count()
+    print(f"DEBUG: Vectorstore cargado exitosamente. Total de elementos indexados: {doc_count}")
+    if doc_count == 0:
+        print("ADVERTENCIA: Vectorstore vacio. Re-indexando documentos...")
+        chunks = run_ingestion()
+        return build_vectorstore(chunks, persist_directory=persist_directory)
+        
+    return vectorstore
 
 
 def get_llm():
-    """Inicializa el modelo de lenguaje configurado en las variables de entorno."""
+    """Inicializa la instancia del modelo de lenguaje."""
     api_key_groq = os.getenv("GROQ_API_KEY")
     api_key_openai = os.getenv("OPENAI_API_KEY")
     
@@ -53,7 +76,7 @@ def get_llm():
             api_key=api_key_openai
         )
     else:
-        raise ValueError("Clave API de LLM no configurada en el archivo .env")
+        raise ValueError("Clave API de LLM no configurada en las variables de entorno.")
 
 
 def create_strict_prompt() -> ChatPromptTemplate:
@@ -80,27 +103,40 @@ Respuesta de JC:"""
     return ChatPromptTemplate.from_template(system_template)
 
 
-def format_documents(docs: List[Any]) -> str:
-    """Formatea los documentos recuperados incluyendo metadatos de fuente y pagina."""
+def format_documents_with_debug(docs: List[Any]) -> str:
+    """Formatea los documentos recuperados e imprime diagnósticos en stdout."""
+    print(f"\nDEBUG RETRIEVER: Cantidad de chunks recuperados = {len(docs)}")
+    if not docs:
+        print("ERROR RETRIEVER: El buscador retorno una lista vacia [] para la consulta.")
+        return "SIN_CONTEXTO_RECUPERADO"
+        
     formatted_blocks = []
-    for doc in docs:
+    for idx, doc in enumerate(docs, start=1):
         source = doc.metadata.get("source", "desconocido")
         page = doc.metadata.get("page", 1)
+        print(f"  Chunk #{idx} -> Fuente: {source} | Pagina: {page} | Longitud: {len(doc.page_content)} caracteres")
         block = f"[Fuente: {source} | Pagina: {page}]\n{doc.page_content}"
         formatted_blocks.append(block)
+        
     return "\n\n---\n\n".join(formatted_blocks)
 
 
 def build_rag_chain():
-    """Ensambla el flujo RAG de recuperacion y generacion."""
+    """Ensambla la cadena RAG con busqueda global por similitud semantica."""
     vectorstore = load_vectorstore()
-    retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
+    
+    # Busqueda global sobre los 5 PDFs
+    retriever = vectorstore.as_retriever(
+        search_type="similarity",
+        search_kwargs={"k": 4}
+    )
+    
     llm = get_llm()
     prompt = create_strict_prompt()
     
     rag_chain = (
         {
-            "context": retriever | format_documents,
+            "context": retriever | format_documents_with_debug,
             "question": RunnablePassthrough()
         }
         | prompt
@@ -111,26 +147,16 @@ def build_rag_chain():
     return rag_chain
 
 
-# Alias de retrocompatibilidad
 construir_cadena_rag = build_rag_chain
 
 
 def run_rag_validation():
-    """Valida la ejecucion de la cadena RAG con consultas de prueba."""
+    """Ejecuta una prueba de depuracion de la cadena RAG."""
     chain = build_rag_chain()
-    
-    test_queries = [
-        "¿Cuál es la nota mínima aprobatoria y cómo se evalúa?",
-        "¿Hasta cuántos días antes del inicio puedo pedir el 100% de reembolso de mi matrícula?",
-        "¿Quién es el presidente de Francia?"
-    ]
-    
-    print("--- VALIDACION DE CADENA RAG (AGENTE JC) ---")
-    for query in test_queries:
-        print(f"\nConsulta: {query}")
-        response = chain.invoke(query)
-        print(f"Respuesta JC:\n{response}")
-        print("-" * 50)
+    test_query = "¿Cuál es la nota mínima aprobatoria y cómo se evalúa?"
+    print(f"\n--- PRUEBA DE DEPURACION: '{test_query}' ---")
+    response = chain.invoke(test_query)
+    print(f"\nRespuesta LLM:\n{response}\n")
 
 
 if __name__ == "__main__":
