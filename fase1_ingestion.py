@@ -18,7 +18,7 @@ def clean_text(text: str) -> str:
 
 
 def load_documents(docs_directory: str = os.path.join("Chat", "Documentos")) -> List[Document]:
-    """Carga y limpia documentos PDF desde el directorio especificado."""
+    """Carga y limpia documentos PDF desde el directorio especificado omitiendo paginas vacias o portadas breves."""
     docs_path = Path(docs_directory)
     
     if not docs_path.exists():
@@ -37,14 +37,19 @@ def load_documents(docs_directory: str = os.path.join("Chat", "Documentos")) -> 
             pages = loader.load()
             
             for page in pages:
-                page.page_content = clean_text(page.page_content)
+                cleaned_content = clean_text(page.page_content)
+                # Filtrar portadas breves o paginas de encabezado ruidosas con menos de 80 caracteres
+                if len(cleaned_content) < 80 and "Universidad" in cleaned_content:
+                    continue
+                    
+                page.page_content = cleaned_content
                 page.metadata["source"] = pdf_path.name
                 page.metadata["page"] = int(page.metadata.get("page", 0)) + 1
                 loaded_documents.append(page)
         except Exception as e:
             print(f"Error al procesar el archivo {pdf_path.name}: {e}")
             
-    print(f"Archivos procesados: {len(pdf_files)} | Paginas extraidas: {len(loaded_documents)}")
+    print(f"Archivos procesados: {len(pdf_files)} | Paginas utiles extraidas: {len(loaded_documents)}")
     return loaded_documents
 
 

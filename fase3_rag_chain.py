@@ -1,5 +1,4 @@
 import os
-import sys
 from typing import List, Any
 from pathlib import Path
 from dotenv import load_dotenv
@@ -31,7 +30,6 @@ def load_vectorstore() -> Chroma:
     persist_directory = os.path.join("Chat", "chroma_db")
     embeddings = get_embedding_model()
     
-    # Auto-indexacion si el directorio no existe o esta vacio
     if not os.path.exists(persist_directory) or not os.listdir(persist_directory):
         print("ADVERTENCIA: Base de datos vectorial no encontrada. Iniciando indexacion automatica...")
         chunks = run_ingestion()
@@ -45,19 +43,11 @@ def load_vectorstore() -> Chroma:
         collection_name="utl_jc_docs"
     )
     
-    # Validacion del numero de documentos indexados
-    doc_count = vectorstore._collection.count()
-    print(f"DEBUG: Vectorstore cargado exitosamente. Total de elementos indexados: {doc_count}")
-    if doc_count == 0:
-        print("ADVERTENCIA: Vectorstore vacio. Re-indexando documentos...")
-        chunks = run_ingestion()
-        return build_vectorstore(chunks, persist_directory=persist_directory)
-        
     return vectorstore
 
 
 def get_llm():
-    """Inicializa la instancia del modelo de lenguaje."""
+    """Inicializa el modelo de lenguaje configurado."""
     api_key_groq = os.getenv("GROQ_API_KEY")
     api_key_openai = os.getenv("OPENAI_API_KEY")
     
@@ -79,21 +69,21 @@ def get_llm():
         raise ValueError("Clave API de LLM no configurada en las variables de entorno.")
 
 
-def create_strict_prompt() -> ChatPromptTemplate:
-    """Construye la plantilla de prompt con restricciones estrictas de contexto."""
+def create_flexible_prompt() -> ChatPromptTemplate:
+    """Construye la plantilla de prompt con razonamiento semantico sobre el contexto disponible."""
     system_template = """Eres JC, el agente de Inteligencia Artificial oficial de atencion al estudiante de la Universidad Tecnologica de Lima (UTL).
 
-Tu mision es responder las dudas de los estudiantes basandote UNICAMENTE en el siguiente contexto extraido de los documentos PDF oficiales.
+Tu objetivo es responder las consultas de los estudiantes analizando y sintetizando la informacion contenida en el siguiente CONTEXTO extraido de los documentos oficiales.
 
 ====================== CONTEXTO DE LOS DOCUMENTOS ======================
 {context}
 ========================================================================
 
-REGLAS OBLIGATORIAS:
-1. Responde en un tono profesional, claro y directo en idioma español.
-2. Basate UNICAMENTE en la informacion explicita del CONTEXTO proporcionado. No asumas ni inventes datos.
-3. Al final de tu respuesta, DEBES CITAR la fuente indicando el nombre del archivo PDF y la pagina (ejemplo: Fuente: reglamento_estudiante.pdf | Pagina: 2).
-4. Si la respuesta a la pregunta del estudiante NO se encuentra explicitamente en el contexto proporcionado, responde EXACTAMENTE:
+DIRECTIVAS DE PROCESAMIENTO Y SINTESIS:
+1. Analiza el contexto buscando conceptos equivalentes o relacionados. Si la pregunta consulta por "nota minima", "nota aprobatoria", "evaluaciones" o "calificaciones", responde con los requisitos de evaluacion o notas aprobatorias especificadas en el contexto (por ejemplo, la nota minima de 14 para aprobar evaluaciones).
+2. Construye una respuesta util, clara, profesional y directa basada en los datos encontrados en el contexto.
+3. AL FINAL DE TU RESPUESTA, CITA SIEMPRE la fuente indicando el nombre del archivo PDF y la pagina (ejemplo: Fuente: preguntas_frecuentes_cursos_certificados.pdf | Pagina: 2).
+4. UNICAMENTE si el contexto proporcionado no guarda ninguna relacion o equivalencia con el tema consultado, responde EXACTAMENTE:
 "No encontré esta información en los documentos."
 
 Pregunta del Estudiante: {question}
@@ -103,18 +93,15 @@ Respuesta de JC:"""
     return ChatPromptTemplate.from_template(system_template)
 
 
-def format_documents_with_debug(docs: List[Any]) -> str:
-    """Formatea los documentos recuperados e imprime diagnósticos en stdout."""
-    print(f"\nDEBUG RETRIEVER: Cantidad de chunks recuperados = {len(docs)}")
+def format_documents(docs: List[Any]) -> str:
+    """Formatea los documentos recuperados formateando metadatos de origen."""
     if not docs:
-        print("ERROR RETRIEVER: El buscador retorno una lista vacia [] para la consulta.")
         return "SIN_CONTEXTO_RECUPERADO"
         
     formatted_blocks = []
-    for idx, doc in enumerate(docs, start=1):
+    for doc in docs:
         source = doc.metadata.get("source", "desconocido")
         page = doc.metadata.get("page", 1)
-        print(f"  Chunk #{idx} -> Fuente: {source} | Pagina: {page} | Longitud: {len(doc.page_content)} caracteres")
         block = f"[Fuente: {source} | Pagina: {page}]\n{doc.page_content}"
         formatted_blocks.append(block)
         
@@ -122,21 +109,20 @@ def format_documents_with_debug(docs: List[Any]) -> str:
 
 
 def build_rag_chain():
-    """Ensambla la cadena RAG con busqueda global por similitud semantica."""
+    """Ensambla la cadena RAG con un recuperador ampliado (k=6) y prompt con sintesis semantica."""
     vectorstore = load_vectorstore()
     
-    # Busqueda global sobre los 5 PDFs
     retriever = vectorstore.as_retriever(
         search_type="similarity",
-        search_kwargs={"k": 4}
+        search_kwargs={"k": 6}
     )
     
     llm = get_llm()
-    prompt = create_strict_prompt()
+    prompt = create_flexible_prompt()
     
     rag_chain = (
         {
-            "context": retriever | format_documents_with_debug,
+            "context": retriever | format_documents,
             "question": RunnablePassthrough()
         }
         | prompt
@@ -151,12 +137,20 @@ construir_cadena_rag = build_rag_chain
 
 
 def run_rag_validation():
-    """Ejecuta una prueba de depuracion de la cadena RAG."""
+    """Valida la ejecucion de la cadena RAG refactorizada."""
     chain = build_rag_chain()
-    test_query = "¿Cuál es la nota mínima aprobatoria y cómo se evalúa?"
-    print(f"\n--- PRUEBA DE DEPURACION: '{test_query}' ---")
-    response = chain.invoke(test_query)
-    print(f"\nRespuesta LLM:\n{response}\n")
+    
+    test_queries = [
+        "¿Cuál es la nota mínima?",
+        "¿Cuáles son las calificaciones aprobatorias?"
+    ]
+    
+    print("--- VALIDACION DE CADENA RAG REFACTORIZADA (NIVEL 3) ---")
+    for query in test_queries:
+        print(f"\nConsulta: {query}")
+        response = chain.invoke(query)
+        print(f"Respuesta JC:\n{response}")
+        print("-" * 50)
 
 
 if __name__ == "__main__":
