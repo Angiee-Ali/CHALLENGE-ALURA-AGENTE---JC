@@ -1,5 +1,5 @@
 # Agente Inteligente RAG "JC" - Universidad Tecnologica de Lima (UTL)
-### Arquitectura RAG con LangChain, ChromaDB, Streamlit y Despliegue en OCI
+### Arquitectura RAG con LangChain, ChromaDB, Streamlit y Despliegue en OCI / Streamlit Cloud
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python)
 ![LangChain](https://img.shields.io/badge/Framework-LangChain-emerald?logo=chainlink)
@@ -12,9 +12,10 @@ JC es un agente virtual basado en Arquitectura RAG (Retrieval-Augmented Generati
 
 ---
 
-## Repositorio del Proyecto
-- Repositorio GitHub: [CHALLENGE-ALURA-AGENTE---JC](https://github.com/Angiee-Ali/CHALLENGE-ALURA-AGENTE---JC.git)
-- Ruta de Desarrollo: `C:\Users\USER\Desktop\Oracle One\Agente IA`
+## Repositorio y Aplicativo Web
+- **Aplicacion Web en Produccion**: [https://alura-agente---jc.streamlit.app/](https://alura-agente---jc.streamlit.app/)
+- **Repositorio GitHub**: [CHALLENGE-ALURA-AGENTE---JC](https://github.com/Angiee-Ali/CHALLENGE-ALURA-AGENTE---JC.git)
+- **Ruta de Desarrollo**: `C:\Users\USER\Desktop\Oracle One\Agente IA`
 
 ---
 
@@ -33,7 +34,7 @@ JC es un agente virtual basado en Arquitectura RAG (Retrieval-Augmented Generati
 
 ### Fase A: Ingestion (`fase1_ingestion.py`)
 - Lectura estructurada de 5 PDFs oficiales mediante PyPDFLoader.
-- Normalizacion del contenido mediante expresiones regulares.
+- Normalizacion del contenido mediante expresiones regulares y filtrado de portadas ruidosas.
 - Fragmentacion con `RecursiveCharacterTextSplitter` (chunk_size=1000, chunk_overlap=200).
 - Preservacion de metadatos de fuente y numero de pagina.
 
@@ -43,17 +44,17 @@ JC es un agente virtual basado en Arquitectura RAG (Retrieval-Augmented Generati
 
 ### Fase C: Rag_chain (`fase3_rag_chain.py`)
 - Integracion del LLM (Llama 3.1 8B en Groq u OpenAI).
-- Implementacion de prompt de sistema estricto con restricciones de dominio cerrado.
+- Implementacion de prompt de sistema estricto con sintesis semantica asociativa.
 - Exigencia de citacion explicita de fuentes (archivo PDF y pagina).
 - Respuesta predeterminada ante ausencia de contexto: *"No encontré esta información en los documentos."*
 
 ### Fase D: Interfaz y Registro (`app.py` & `logger.py`)
-- Desarrollo de interfaz web interactiva en Streamlit con la paleta institucional (azul marino y gris pizarra) integrando el logo oficial (`utl_logo.png`).
+- Desarrollo de interfaz web interactiva en Streamlit con la paleta institucional (azul marino y gris pizarra) integrando el logo oficial (`utl_logo.png`) y botones de descarga de PDF.
 - Sistema de auditoria en formato JSON estructurado en `Chat/logs/historial_consultas.json`.
 
 ### Fase E: Deploy y Documentacion (`Dockerfile` & `README.md`)
 - Empaquetado en contenedor Docker utilizando imagen base Python 3.10-slim.
-- Instrucciones de despliegue para Oracle Cloud Infrastructure (OCI).
+- Despliegue continuo publicado en Streamlit Community Cloud e instrucciones para Oracle Cloud Infrastructure (OCI).
 
 ---
 
@@ -151,8 +152,8 @@ Habilitar puerto TCP `8501` en la Security List de la VCN para habilitar acceso 
 [
   {
     "timestamp": "2026-07-26 15:40:00",
-    "query": "¿Cuál es la nota mínima aprobatoria?",
-    "response": "La nota mínima aprobatoria es 13 en la escala vigesimal (0 a 20).\n[Fuente: reglamento_estudiante.pdf | Pagina: 2]"
+    "query": "¿Cuál es la nota mínima?",
+    "response": "La nota mínima para aprobar las evaluaciones es de 14.\n[Fuente: preguntas_frecuentes_cursos_certificados.pdf | Pagina: 2]"
   }
 ]
 ```
@@ -161,4 +162,5 @@ Habilitar puerto TCP `8501` en la Security List de la VCN para habilitar acceso 
 
 ## Autor
 Proyecto final desarrollado para Challenge Alura / Oracle Next Education (ONE).
+- Aplicacion Web: [https://alura-agente---jc.streamlit.app/](https://alura-agente---jc.streamlit.app/)
 - Repositorio Git: [Angiee-Ali/CHALLENGE-ALURA-AGENTE---JC](https://github.com/Angiee-Ali/CHALLENGE-ALURA-AGENTE---JC.git)
