@@ -1,0 +1,124 @@
+=== AUDITORIA DE EXTRACCION DE TEXTO (PDF RAW TEXT) ===
+
+--- ARCHIVO: guia_uso_plataforma.pdf | PAGINA: 1 ---
+Guía de Uso de la Plataforma
+Universidad Tecnológica de Lima
+2026
+UTL
+LIMA
+1
+
+--- ARCHIVO: guia_uso_plataforma.pdf | PAGINA: 2 ---
+Guía de Uso de la Plataforma
+Bienvenido a la guía de uso de la Plataforma Educativa de la Universidad Tecnológica
+de Lima. Para ingresar al sistema, diríjase a la URL oficial de la UTL e introduzca su número
+de documento de identidad y contraseña.
+Navegación Básica
+La pantalla principal (Dashboard) le mostrará su progreso académico, notificaciones
+recientes y el acceso directo a sus cursos mediante el menú lateral izquierdo.
+Uso del Agente Lector de PDF
+Dentro del módulo de su curso, haga clic en cualquier material de lectura marcado con
+el ícono de PDF. El documento se abrirá en el visor integrado y el agente inteligente le
+permitirá formular consultas directas sobre el texto.
+2
+
+--- ARCHIVO: politica_reembolso_matriculas.pdf | PAGINA: 1 ---
+Política de Reembolso de Matrículas
+Universidad Tecnológica de Lima
+2026
+UTL
+LIMA
+1
+
+--- ARCHIVO: politica_reembolso_matriculas.pdf | PAGINA: 2 ---
+Política de Reembolso de Matrículas
+La presente política tiene como finalidad establecer las condiciones, plazos y
+procedimientos bajo los cuales la Universidad Tecnológica de Lima (UTL) procesará las
+solicitudes de reembolso de matrículas y pagos de cursos realizados a través de nuestra
+plataforma educativa online.
+Condiciones para el Reembolso
+Reembolso del 100%: Se aplicará si el estudiante solicita la cancelación de la matrícula
+hasta siete (7) días calendario antes de la fecha de inicio oficial del curso. Reembolso del 50%:
+Procederá si la solicitud se presenta dentro de los primeros tres (3) días calendario posteriores
+al inicio del curso, siempre y cuando el estudiante no haya completado más del 10% del
+contenido.
+Procedimiento
+Para iniciar un trámite de reembolso, el estudiante debe enviar una solicitud formal al
+Departamento de Finanzas de la UTL a través del módulo de Soporte de la plataforma,
+adjuntando su comprobante de pago y motivo detallado.
+2
+
+--- ARCHIVO: preguntas_frecuentes_cursos_certificados.pdf | PAGINA: 1 ---
+Preguntas Frecuentes sobre Cursos y Certificados
+Universidad Tecnológica de Lima
+2026
+UTL
+LIMA
+1
+
+--- ARCHIVO: preguntas_frecuentes_cursos_certificados.pdf | PAGINA: 2 ---
+Preguntas Frecuentes sobre Cursos y Certificados
+¿Cómo accedo al contenido de mi curso?
+Una vez completada su matrícula, usted recibirá un correo electrónico con sus
+credenciales de acceso. Al ingresar a la plataforma de la Universidad Tecnológica de Lima,
+encontrará un panel de control con los cursos activos para visualizar módulos y descargar
+PDFs.
+¿Qué es el agente lector y cómo me ayuda?
+Es una herramienta de inteligencia artificial integrada en la plataforma. Al abrir un
+documento PDF del curso, el agente analizará el texto y usted podrá escribirle preguntas
+directas basándose exclusivamente en el contenido del documento.
+¿Cómo obtengo mi certificado al finalizar?
+Para obtener el certificado, el estudiante debe haber visualizado todos los módulos,
+aprobado las evaluaciones con nota mínima de 14 y no tener deudas pendientes.
+2
+
+--- ARCHIVO: programa_becas_afiliados.pdf | PAGINA: 1 ---
+Programa de Becas y Afiliados
+Universidad Tecnológica de Lima
+2026
+UTL
+LIMA
+1
+
+--- ARCHIVO: programa_becas_afiliados.pdf | PAGINA: 2 ---
+Programa de Becas y Afiliados
+La Universidad Tecnológica de Lima está comprometida con la inclusión educativa.
+Por ello, hemos establecido un fondo de becas destinado a estudiantes con alto rendimiento
+académico y a aquellos que presenten dificultades socioeconómicas comprobables.
+Tipos de Becas
+Beca a la Excelencia Académica (cobertura parcial o total por alto rendimiento) y Beca
+de Inclusión (subsidio evaluado por Bienestar Estudiantil).
+Programa de Afiliados
+Permite a estudiantes y egresados generar ingresos extra recomendando la plataforma.
+Por cada nuevo estudiante matriculado mediante su enlace de referido, recibirá una comisión
+del 15% del valor de la matrícula.
+2
+
+--- ARCHIVO: reglamento_estudiante.pdf | PAGINA: 1 ---
+Reglamento del Estudiante
+Universidad Tecnológica de Lima
+2026
+UTL
+LIMA
+1
+
+--- ARCHIVO: reglamento_estudiante.pdf | PAGINA: 2 ---
+Reglamento del Estudiante
+El presente documento establece las normas y procedimientos que rigen el
+comportamiento, los derechos y las obligaciones de los estudiantes inscritos en la plataforma
+educativa de la Universidad Tecnológica de Lima (UTL). Este reglamento busca garantizar un
+entorno de aprendizaje respetuoso, ético y eficiente, aprovechando las herramientas
+tecnológicas avanzadas disponibles, incluyendo nuestro agente inteligente de análisis
+documental.
+Derechos del Estudiante
+Todo estudiante matriculado en la UTL tiene derecho a acceder a los materiales de
+estudio en formato PDF correspondientes a su nivel y programa. Asimismo, tiene derecho a
+interactuar con el agente inteligente de lectura para formular preguntas, obtener resúmenes y
+aclarar dudas sobre el contenido de los documentos proporcionados.
+Deberes y Obligaciones
+El estudiante está obligado a mantener un comportamiento ético en el uso de la
+plataforma. El acceso al agente inteligente de lectura de PDF es estrictamente para fines
+académicos. Queda terminantemente prohibido utilizar el agente para procesar material
+protegido por derechos de autor ajeno a la UTL sin autorización.
+2
+

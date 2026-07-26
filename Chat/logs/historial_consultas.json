@@ -78,5 +78,10 @@
     "timestamp": "2026-07-26 15:44:19",
     "query": "Cual es la nota minima",
     "response": "Lo siento, pero no encontré información sobre la nota mínima en los documentos proporcionados. \n\nNo encontré esta información en los documentos."
+  },
+  {
+    "timestamp": "2026-07-26 16:15:02",
+    "query": "¿Cuáles son las normas del reglamento del estudiante sobre asistencia y evaluaciones?",
+    "response": "Lo siento, pero no encontré información sobre las normas del reglamento del estudiante sobre asistencia y evaluaciones en los documentos proporcionados.\n\nFuente: reglamento_estudiante.pdf | Pagina: 2"
   }
 ]
