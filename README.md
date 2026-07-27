@@ -21,7 +21,7 @@ El sistema opera mediante un pipeline desacoplado en cinco fases principales:
 2. **Vectorstore**: Indexacion semantica de fragmentos mediante el modelo de embeddings `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` almacenados de forma persistente en una base de datos vectorial local (ChromaDB).
 3. **Rag_chain**: Ejecucion de busqueda por similitud semantica (k=6) para construir un contexto enriquecido que se envia a un LLM (Llama 3.1 8B via Groq API) sujeto a un prompt de sistema estricto con asociacion semantica y citacion obligatoria de fuente (nombre del PDF y numero de pagina).
 4. **Interfaz y Registro**: Despliegue de una aplicacion web interactiva en Streamlit con logo institucional (`utl_logo.png`), descargas directas de PDF y registro de auditoria en formato JSON (`Chat/logs/historial_consultas.json`).
-5. **Deploy**: Preparado para ejecucion continua en la nube o contenerizacion mediante Docker para Oracle Cloud Infrastructure (OCI).
+5. **Deploy**: Despliegue continuo en produccion mediante Streamlit Community Cloud y preparado para contenerizacion con Docker en Oracle Cloud Infrastructure (OCI).
 
 ---
 
@@ -34,7 +34,7 @@ El sistema opera mediante un pipeline desacoplado en cinco fases principales:
 - **Modelo de Embeddings**: `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` (HuggingFace)
 - **Modelo de Lenguaje (LLM)**: Meta Llama 3.1 8B Instant (via Groq API) / OpenAI GPT-4o-mini
 - **Interfaz de Usuario**: Streamlit
-- **Contenerizacion y Despliegue Cloud**: Docker / Streamlit Community Cloud / Oracle Cloud Infrastructure (OCI)
+- **Plataforma de Despliegue Cloud**: Streamlit Community Cloud / Docker / Oracle Cloud Infrastructure (OCI)
 
 ---
 
@@ -113,10 +113,10 @@ Acceder en el navegador a `http://localhost:8501`.
 
 ---
 
-## 7. Evidencia del Deploy en OCI (Oracle Cloud Infrastructure)
+## 7. Evidencia del Deploy en Streamlit Community Cloud (Produccion)
 
-### Enlace de Produccion
-- **Aplicacion Desplegada**: [Insertar aquí el enlace público de la aplicación desplegada](https://alura-agente---jc.streamlit.app/)
+### Enlace Publico en Produccion
+- **Aplicacion Desplegada**: [https://alura-agente---jc.streamlit.app/](https://alura-agente---jc.streamlit.app/)
 
 ### Evidencia Visual en Produccion
 
