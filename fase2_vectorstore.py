@@ -1,4 +1,5 @@
 import os
+import shutil
 from typing import List
 
 from fase1_ingestion import run_ingestion
@@ -22,9 +23,15 @@ def build_vectorstore(
     chunks: List[Document], 
     persist_directory: str = os.path.join("Chat", "chroma_db")
 ) -> Chroma:
-    """Genera embeddings y los persiste en la base de datos vectorial ChromaDB."""
+    """Genera embeddings y los persiste en la base de datos vectorial ChromaDB con resiliencia."""
     embeddings = get_embedding_model()
     
+    if os.path.exists(persist_directory):
+        try:
+            shutil.rmtree(persist_directory, ignore_errors=True)
+        except Exception:
+            pass
+            
     vectorstore = Chroma.from_documents(
         documents=chunks,
         embedding=embeddings,

@@ -26,7 +26,7 @@ def get_embedding_model() -> HuggingFaceEmbeddings:
 
 
 def load_vectorstore() -> Chroma:
-    """Carga o indexa automaticamente la base de datos vectorial local."""
+    """Carga o indexa automaticamente la base de datos vectorial local con resiliencia a errores de coleccion."""
     persist_directory = os.path.join("Chat", "chroma_db")
     embeddings = get_embedding_model()
     
@@ -37,13 +37,21 @@ def load_vectorstore() -> Chroma:
             raise ValueError("Error critico: No se pudieron extraer chunks de los documentos PDF.")
         return build_vectorstore(chunks, persist_directory=persist_directory)
     
-    vectorstore = Chroma(
-        persist_directory=persist_directory,
-        embedding_function=embeddings,
-        collection_name="utl_jc_docs"
-    )
-    
-    return vectorstore
+    try:
+        vectorstore = Chroma(
+            persist_directory=persist_directory,
+            embedding_function=embeddings,
+            collection_name="utl_jc_docs"
+        )
+        if vectorstore._collection.count() == 0:
+            print("ADVERTENCIA: Coleccion vacia. Re-indexando documentos...")
+            chunks = run_ingestion()
+            return build_vectorstore(chunks, persist_directory=persist_directory)
+        return vectorstore
+    except Exception as e:
+        print(f"ADVERTENCIA: Error al cargar coleccion ChromaDB ({e}). Re-indexando documentos...")
+        chunks = run_ingestion()
+        return build_vectorstore(chunks, persist_directory=persist_directory)
 
 
 def get_llm():
