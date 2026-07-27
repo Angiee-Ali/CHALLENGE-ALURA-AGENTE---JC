@@ -1,166 +1,105 @@
 # Agente Inteligente RAG "JC" - Universidad Tecnologica de Lima (UTL)
-### Arquitectura RAG con LangChain, ChromaDB, Streamlit y Despliegue en OCI / Streamlit Cloud
 
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python)
-![LangChain](https://img.shields.io/badge/Framework-LangChain-emerald?logo=chainlink)
-![Streamlit](https://img.shields.io/badge/UI-Streamlit-red?logo=streamlit)
-![ChromaDB](https://img.shields.io/badge/VectorDB-ChromaDB-purple)
-![Oracle Cloud](https://img.shields.io/badge/Cloud-Oracle%20Cloud%20(OCI)-orange?logo=oracle)
-![Docker](https://img.shields.io/badge/Container-Docker-blue?logo=docker)
-
-JC es un agente virtual basado en Arquitectura RAG (Retrieval-Augmented Generation) desarrollado para la Universidad Tecnologica de Lima (UTL). Su objetivo es responder consultas de estudiantes basandose exclusivamente en la documentacion oficial en formato PDF, garantizando respuestas precisas y evitando la generacion de informacion no fundamentada.
+Proyecto final desarrollado como estudiante de ingenieria de software para la Universidad Tecnologica de Lima (UTL). El sistema implementa una arquitectura RAG (Retrieval-Augmented Generation) para responder consultas academicas y administrativas de los estudiantes basandose exclusivamente en la documentacion oficial en formato PDF, garantizando respuestas fundamentadas y libres de alucinaciones.
 
 ---
 
-## Repositorio y Aplicativo Web
-- **Aplicacion Web en Produccion**: [https://alura-agente---jc.streamlit.app/](https://alura-agente---jc.streamlit.app/)
-- **Repositorio GitHub**: [CHALLENGE-ALURA-AGENTE---JC](https://github.com/Angiee-Ali/CHALLENGE-ALURA-AGENTE---JC.git)
-- **Ruta de Desarrollo**: `C:\Users\USER\Desktop\Oracle One\Agente IA`
+## 1. Resumen Tecnico y Arquitectura
 
----
-
-## Arquitectura del Sistema RAG
+El Agente JC opera mediante un pipeline desacoplado en cinco fases principales (Ingestion, Vectorstore, Rag_chain, Interfaz/Registro y Deploy):
 
 ```text
-[PDFs Oficiales UTL] --> (PyPDFLoader) --> (Limpieza y Chunking)
-                                                  |
-                                                  v
-[Respuesta Streamlit] <-- (LLM Llama-3.1) <-- (Prompt Estricto) <-- (ChromaDB Vectorstore)
+[PDFs Oficiales UTL] -> (PyPDFLoader) -> (Limpieza & Chunking)
+                                                |
+                                                v
+[Interfaz Streamlit] <- (LLM Llama-3.1) <- (Prompt Estricto) <- (ChromaDB Vectorstore)
 ```
 
----
-
-## Fases Tecnicas de Implementacion
-
-### Fase A: Ingestion (`fase1_ingestion.py`)
-- Lectura estructurada de 5 PDFs oficiales mediante PyPDFLoader.
-- Normalizacion del contenido mediante expresiones regulares y filtrado de portadas ruidosas.
-- Fragmentacion con `RecursiveCharacterTextSplitter` (chunk_size=1000, chunk_overlap=200).
-- Preservacion de metadatos de fuente y numero de pagina.
-
-### Fase B: Vectorstore (`fase2_vectorstore.py`)
-- Generacion de embeddings multilingües mediante `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`.
-- Persistencia e indexacion vectorial en ChromaDB en el directorio `Chat/chroma_db`.
-
-### Fase C: Rag_chain (`fase3_rag_chain.py`)
-- Integracion del LLM (Llama 3.1 8B en Groq u OpenAI).
-- Implementacion de prompt de sistema estricto con sintesis semantica asociativa.
-- Exigencia de citacion explicita de fuentes (archivo PDF y pagina).
-- Respuesta predeterminada ante ausencia de contexto: *"No encontré esta información en los documentos."*
-
-### Fase D: Interfaz y Registro (`app.py` & `logger.py`)
-- Desarrollo de interfaz web interactiva en Streamlit con la paleta institucional (azul marino y gris pizarra) integrando el logo oficial (`utl_logo.png`) y botones de descarga de PDF.
-- Sistema de auditoria en formato JSON estructurado en `Chat/logs/historial_consultas.json`.
-
-### Fase E: Deploy y Documentacion (`Dockerfile` & `README.md`)
-- Empaquetado en contenedor Docker utilizando imagen base Python 3.10-slim.
-- Despliegue continuo publicado en Streamlit Community Cloud e instrucciones para Oracle Cloud Infrastructure (OCI).
+1. **Ingestion**: Extrae y limpia el texto de 5 documentos PDF oficiales omitiendo portadas o encabezados ruidosos.
+2. **Vectorstore**: Indexa semanticamente los fragmentos utilizando embeddings multilingües en una base de datos vectorial local (ChromaDB).
+3. **Rag_chain**: Ejecuta una busqueda por similitud (k=6) y construye el contexto que es procesado por un LLM (Llama 3.1 8B via Groq API) sujeto a un prompt de sistema estricto con citacion obligatoria de fuente (archivo PDF y pagina).
+4. **Interfaz y Registro**: Expone una interfaz web interactiva en Streamlit con descarga directa de documentos PDF y registro de auditoria en formato JSON.
+5. **Deploy**: Preparado para ejecucion continua en Streamlit Community Cloud o contenerizacion mediante Docker en Oracle Cloud Infrastructure (OCI).
 
 ---
 
-## Estructura del Proyecto
+## 2. Stack Tecnologico
 
-```text
-Agente IA/
-│
-├── Chat/
-│   ├── Documentos/               # Archivos PDF oficiales UTL
-│   ├── chroma_db/                # Base de datos vectorial persistente
-│   └── logs/                     # Registros de auditoria JSON
-│
-├── fase1_ingestion.py            # Fase A: Ingestion de PDFs
-├── fase2_vectorstore.py          # Fase B: Indexacion en ChromaDB
-├── fase3_rag_chain.py            # Fase C: Cadena RAG y Prompt Estricto
-├── logger.py                     # Modulo de auditoria JSON
-├── app.py                        # Fase D: Aplicacion web Streamlit
-├── utl_logo.png                  # Logo oficial UTL
-│
-├── Dockerfile                    # Fase E: Configuracion Docker
-├── .dockerignore                 # Exclusiones de Docker
-├── requirements.txt              # Dependencias de Python
-├── .env.example                  # Plantilla de variables de entorno
-└── README.md                     # Documentacion tecnica del proyecto
-```
+- **Lenguaje de Programacion**: Python 3.10+
+- **Orquestador RAG**: LangChain Core / LangChain Community / LCEL
+- **Procesamiento Documental**: PyPDFLoader & RecursiveCharacterTextSplitter
+- **Base de Datos Vectorial**: ChromaDB
+- **Modelo de Embeddings**: `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` (HuggingFace)
+- **Modelo de Lenguaje (LLM)**: Meta Llama 3.1 8B Instant (vía Groq API) / OpenAI GPT-4o-mini
+- **Interfaz de Usuario**: Streamlit
+- **Contenerizacion y Despliegue**: Docker / Streamlit Community Cloud / OCI
 
 ---
 
-## Instalacion y Ejecucion Local
+## 3. Evidencias de Funcionamiento
 
-### 1. Clonar el Repositorio
+### Aplicativo en Produccion
+- **URL Publica**: [https://alura-agente---jc.streamlit.app/](https://alura-agente---jc.streamlit.app/)
+- **Repositorio Oficial**: [https://github.com/Angiee-Ali/CHALLENGE-ALURA-AGENTE---JC.git](https://github.com/Angiee-Ali/CHALLENGE-ALURA-AGENTE---JC.git)
+
+### Capturas de Pantalla de la Interfaz
+
+![Demostracion de la Interfaz del Chat](assets/interfaz_chat.png)
+
+![Descarga de Documentos Oficiales en Panel Lateral](assets/descarga_documentos.png)
+
+---
+
+## 4. Guia de Instalacion y Ejecucion Local
+
+### Requisitos Previos
+- Python 3.10 o superior instalado en el sistema.
+- Clave API de Groq Cloud (gratuita en https://console.groq.com) o clave de OpenAI.
+
+### Paso 1: Clonar el Repositorio
 ```bash
 git clone https://github.com/Angiee-Ali/CHALLENGE-ALURA-AGENTE---JC.git
 cd CHALLENGE-ALURA-AGENTE---JC
 ```
 
-### 2. Instalar Dependencias
+### Paso 2: Instalar Dependencias
 ```bash
 pip install -r requirements.txt
 ```
 
-### 3. Configurar Variables de Entorno (.env)
-Crear un archivo `.env` en la raiz del proyecto con la clave API:
+### Paso 3: Configurar Variables de Entorno
+Crear un archivo `.env` en la raiz del proyecto con la siguiente estructura:
 ```env
 GROQ_API_KEY=tu_clave_api_aqui
 ```
 
-### 4. Ejecutar Pipeline e Interfaz Web
+### Paso 4: Ejecutar Pipeline e Iniciar Servidor Local
 ```bash
 python fase1_ingestion.py
 python fase2_vectorstore.py
 streamlit run app.py
 ```
-
-Acceder desde el navegador a `http://localhost:8501`.
-
----
-
-## Guia de Despliegue en Oracle Cloud Infrastructure (OCI)
-
-### 1. Construir la Imagen Docker
-```bash
-docker build -t chatbot-jc:v1 .
-```
-
-### 2. Autenticacion en OCI Container Registry (OCIR)
-```bash
-docker login <region-key>.ocir.io
-```
-
-### 3. Etiquetar y Subir Imagen
-```bash
-docker tag chatbot-jc:v1 <region-key>.ocir.io/<tenancy-namespace>/chatbot-jc:v1
-docker push <region-key>.ocir.io/<tenancy-namespace>/chatbot-jc:v1
-```
-
-### 4. Despliegue en Instancia OCI
-```bash
-docker run -d \
-  --name chatbot_jc_container \
-  -p 8501:8501 \
-  -e GROQ_API_KEY="tu_clave_api_aqui" \
-  --restart always \
-  <region-key>.ocir.io/<tenancy-namespace>/chatbot-jc:v1
-```
-
-### 5. Configuracion de Regla de Ingress en OCI
-Habilitar puerto TCP `8501` en la Security List de la VCN para habilitar acceso publico.
+Acceder en el navegador a `http://localhost:8501`.
 
 ---
 
-## Auditoria de Registros JSON (`Chat/logs/historial_consultas.json`)
-```json
-[
-  {
-    "timestamp": "2026-07-26 15:40:00",
-    "query": "¿Cuál es la nota mínima?",
-    "response": "La nota mínima para aprobar las evaluaciones es de 14.\n[Fuente: preguntas_frecuentes_cursos_certificados.pdf | Pagina: 2]"
-  }
-]
-```
+## 5. Instrucciones de Despliegue (Deploy)
 
----
+### Opcion A: Streamlit Community Cloud (Recomendado)
+1. Conectar el repositorio de GitHub en [share.streamlit.io](https://share.streamlit.io).
+2. Seleccionar la rama `main` y la ruta del archivo principal `app.py`.
+3. En **Advanced settings ➔ Secrets**, configurar la clave API:
+   ```toml
+   GROQ_API_KEY = "tu_clave_api_aqui"
+   ```
+4. Desplegar la aplicacion.
 
-## Autor
-Proyecto final desarrollado para Challenge Alura / Oracle Next Education (ONE).
-- Aplicacion Web: [https://alura-agente---jc.streamlit.app/](https://alura-agente---jc.streamlit.app/)
-- Repositorio Git: [Angiee-Ali/CHALLENGE-ALURA-AGENTE---JC](https://github.com/Angiee-Ali/CHALLENGE-ALURA-AGENTE---JC.git)
+### Opcion B: Contenerizacion con Docker para OCI (Oracle Cloud Infrastructure)
+1. Construir la imagen Docker:
+   ```bash
+   docker build -t chatbot-jc:v1 .
+   ```
+2. Ejecutar el contenedor pasando la variable de entorno:
+   ```bash
+   docker run -d -p 8501:8501 -e GROQ_API_KEY="tu_clave_api_aqui" --restart always chatbot-jc:v1
+   ```
